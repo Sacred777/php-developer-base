@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; &#1090;&#1077;&#1082;&#1089;&#1090; &#1074;
+        &#1058;&#1077;&#1083;&#1077;&#1075;&#1088;&#1072;&#1092;</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="alert" id="answer"></div>
+    <form class="form form-group" action="input_text.php" method="post">
+        <label class="label" for="author">&#1040;&#1074;&#1090;&#1086;&#1088;:</label>
+        <input class="input form-control mb-3" id="author" type="text" name="author" autocomplete="author">
+
+        <label class="label" for="text">&#1058;&#1077;&#1082;&#1089;&#1090;:</label>
+        <textarea class="textarea form-control mb-3" id="text" name="text"></textarea>
+
+        <label class="label" for="email">Email:</label>
+        <input class="input form-control mb-3" id="email" type="text" name="email" autocomplete="user email">
+
+        <input class="submit btn btn-primary" type="submit"
+               value="&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100;" name="send">
+    </form>
+</div>
+</body>
+</html>
