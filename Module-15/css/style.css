@@ -1,0 +1,45 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+body {
+    font-family: 'Aria', 'Verdana', sans-serif;
+}
+
+.container {
+   padding: 50px 0;
+}
+
+.alert {
+    min-height: 50px;
+}
+
+.ok {
+    color: white;
+    background-color: green;
+}
+
+.error {
+    color: white;
+    background-color: red;
+}
+
+.exception {
+    font-weight: 800;
+    background-color: pink;
+}
