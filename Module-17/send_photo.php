@@ -2,7 +2,7 @@
 
 session_start();
 
-class CorrectFileException extends Exception
+class IncorrectFileException extends Exception
 {
 }
 
@@ -20,9 +20,9 @@ if (isset($_FILES['photo'])) {
         preg_match($mask, $fileName, $matches);
 
         if (!isset($matches[0]) || ($matches[0] !== '.png' && $matches[0] !== '.jpg')) {
-            throw new CorrectFileException('Invalid file format - ' . $fileName);
+            throw new IncorrectFileException('Invalid file format - ' . $fileName);
         } elseif ($_FILES['photo']['size'] > 2097152) {
-            throw new CorrectFileException('File size too large - ' . $_FILES['photo']['size']);
+            throw new IncorrectFileException('File size too large - ' . $_FILES['photo']['size']);
         } else {
             if (!isset($_SESSION['sent'])) {
                 $_SESSION['sent'] = 0;
@@ -30,7 +30,7 @@ if (isset($_FILES['photo'])) {
 
             if (isset($_POST['submit'])) {
                 if ($_SESSION['sent'] > 1) {
-                    throw new CorrectFileException('Exceeded the number of upload');
+                    throw new IncorrectFileException('Exceeded the number of upload');
                 } else {
                     move_uploaded_file($_FILES['photo']['tmp_name'], $targetDir . '/' . $fileName);
                     header('location: ' . $targetDir . '/' . $fileName);
@@ -38,7 +38,7 @@ if (isset($_FILES['photo'])) {
                 }
             }
         }
-    } catch (CorrectFileException $e) {
+    } catch (IncorrectFileException $e) {
         $errorMessage = $e->getMessage() . PHP_EOL;
     }
 }
