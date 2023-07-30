@@ -1,9 +1,5 @@
 <?php
 
-//namespace www\Entities;
-
-//use Entities\PDO;
-
 class User
 {
     private $host = '172.25.208.1';
@@ -22,82 +18,109 @@ class User
         }
     }
 
-    public function create($user)
+    /**
+     * @param array $user
+     * @return void
+     */
+    public function create(array $user): void
+    {
+        if (!empty($user)) {
+            try {
+                $trimedUser = trimAssocArray($user);
+                $sql = "INSERT INTO `User`(`id`, `email`, `first_name`, `last_name`, `age`, `date_created`) VALUES (null, :email, :first_name, :last_name, :age, :date_created)";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    'email' => $trimedUser['email'],
+                    'first_name' => $trimedUser['first_name'],
+                    'last_name' => $trimedUser['last_name'],
+                    'age' => $trimedUser['age'],
+                    'date_created' => (new \DateTime())->format('Y-m-d H:i:s'),
+                ]);
+            } catch (\PDOException $e) {
+                echo 'Error adding to the database: ' . $e->getMessage();
+            }
+        }
+    }
+
+    /**
+     * @param array $user
+     * @return void
+     */
+    public function update(array $user): void
     {
         if (!empty($user)) {
             $trimedUser = trimAssocArray($user);
-            $sql = "INSERT INTO `User`(`id`, `email`, `first_name`, `last_name`, `age`, `date_created`) VALUES (null, :email, :first_name, :last_name, :age, :date_created)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([
-                'email' => $trimedUser['email'],
-                'first_name' => $trimedUser['first_name'],
-                'last_name' => $trimedUser['last_name'],
-                'age' => $trimedUser['age'],
-                'date_created' => (new \DateTime())->format('Y-m-d H:i:s'),
-            ]);
-        }
-    }
-
-    public function update(array $user)
-    {
-        if (empty($user)) return null;
-
-
-        $trimedUser = trimAssocArray($user);
-        $updateColumns = [];
-        if ($trimedUser['email'] !== '') {
-            $updateColumns[] = "email = :email";
-        }
-        if ($trimedUser['first_name'] !== '') {
-            $updateColumns[] = "first_name = :first_name";
-        }
-        if ($trimedUser['last_name'] !== '') {
-            $updateColumns[] = "last_name = :last_name";
-        }
-        if ($trimedUser['age'] !== '') {
-            $updateColumns[] = "age = :age";
-        }
-
-        if (!empty($updateColumns)) {
-            $sql = "UPDATE `User` SET " . implode(", ", $updateColumns) . " WHERE id=:id";
-            $stmt = $this->pdo->prepare($sql);
-
-            $stmt->bindParam(':id', $user['id']);
+            $updateColumns = [];
             if ($trimedUser['email'] !== '') {
-                $stmt->bindParam(':email', $trimedUser['email']);
+                $updateColumns[] = "email = :email";
             }
-
             if ($trimedUser['first_name'] !== '') {
-                $stmt->bindParam(':first_name', $trimedUser['first_name']);
+                $updateColumns[] = "first_name = :first_name";
             }
-
             if ($trimedUser['last_name'] !== '') {
-                $stmt->bindParam(':last_name', $trimedUser['last_name']);
+                $updateColumns[] = "last_name = :last_name";
             }
-
             if ($trimedUser['age'] !== '') {
-                $stmt->bindParam(':age', $trimedUser['age']);
+                $updateColumns[] = "age = :age";
             }
 
-            $stmt->execute();
+            try {
+                $sql = "UPDATE `User` SET " . implode(", ", $updateColumns) . " WHERE id=:id";
+                $stmt = $this->pdo->prepare($sql);
+
+                $stmt->bindParam(':id', $user['id']);
+                if ($trimedUser['email'] !== '') {
+                    $stmt->bindParam(':email', $trimedUser['email']);
+                }
+
+                if ($trimedUser['first_name'] !== '') {
+                    $stmt->bindParam(':first_name', $trimedUser['first_name']);
+                }
+
+                if ($trimedUser['last_name'] !== '') {
+                    $stmt->bindParam(':last_name', $trimedUser['last_name']);
+                }
+
+                if ($trimedUser['age'] !== '') {
+                    $stmt->bindParam(':age', $trimedUser['age']);
+                }
+
+                $stmt->execute();
+            } catch (\PDOException $e) {
+                echo 'Error updating to the database: ' . $e->getMessage();
+            }
         }
     }
 
-    public function delete(string $id)
+    /**
+     * @param string $id
+     * @return void
+     */
+    public function delete(string $id): void
     {
-        if (empty($id)) return null;
-
-        $sql = "DELETE FROM `User` WHERE id=:id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
-
+        if (!empty($id)) {
+            try {
+                $sql = "DELETE FROM `User` WHERE id=:id";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute(['id' => $id]);
+            } catch (\PDOException $e) {
+                echo 'Error deleting to the database: ' . $e->getMessage();
+            }
+        };
     }
 
-    // TODO посмотри что вернёт, если таблица будет пустая
+    /**
+     * @return array
+     */
     public function list(): array
     {
-        $sql = "SELECT * FROM `User`";
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $sql = "SELECT * FROM `User`";
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            echo 'Error getting data from the database: ' . $e->getMessage();
+            return [];
+        }
     }
 }
