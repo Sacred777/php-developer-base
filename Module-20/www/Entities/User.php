@@ -1,16 +1,24 @@
 <?php
 
+namespace Entities;
+
+use \Helpers\UserData;
+use \PDO;
+
 class User
 {
-    private $host = '172.25.208.1';
-    private $dbName = 'm20';
-    private $user = 'root';
-    private $pass = 'test';
-    private $port = 3306;
-    public $pdo = null;
+    private string $host = '172.20.0.1';
+    private string $dbName = 'm20';
+    private string $user = 'root';
+    private string $pass = 'test';
+    private int $port = 3306;
+    private object|null $pdo = null;
+    private $userData = null;
 
     public function __construct()
     {
+        $this->userData = new UserData();
+
         try {
             $this->pdo = new PDO("mysql:host=$this->host;dbname=$this->dbName;port=$this->port", $this->user, $this->pass);
         } catch (\PDOException $e) {
@@ -25,8 +33,8 @@ class User
     public function create(array $user): void
     {
         if (!empty($user)) {
+            $trimedUser = $this->userData->trimedData($user);
             try {
-                $trimedUser = trimAssocArray($user);
                 $sql = "INSERT INTO `User`(`id`, `email`, `first_name`, `last_name`, `age`, `date_created`) VALUES (null, :email, :first_name, :last_name, :age, :date_created)";
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([
@@ -49,7 +57,7 @@ class User
     public function update(array $user): void
     {
         if (!empty($user)) {
-            $trimedUser = trimAssocArray($user);
+            $trimedUser = $this->userData->trimedData($user);
             $updateColumns = [];
             if ($trimedUser['email'] !== '') {
                 $updateColumns[] = "email = :email";

@@ -1,7 +1,8 @@
 <?php
 
-require_once __DIR__ . '/Entities/User.php';
-require_once __DIR__ . '/helpers/trimAssocArray.php';
+require_once __DIR__ . '/autoload.php';
+
+use \Entities\User;
 
 $user = new User();
 
@@ -25,7 +26,6 @@ if (!empty($_POST)) {
             ]);
             break;
         case 'Delete':
-            echo 'Delete';
             $user->delete($_POST['id']);
             break;
     }
