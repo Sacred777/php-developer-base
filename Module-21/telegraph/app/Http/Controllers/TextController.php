@@ -3,20 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\TelegraphText;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TextController extends Controller
 {
 
-    public function showPosts()
+    /**
+     * @return Response
+     */
+    public function showPosts(): Response
     {
         $posts = TelegraphText::all();
         $view = view('text', ['posts' => $posts]);
         return response($view);
     }
 
-
-    public function addPost(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function addPost(Request $request): RedirectResponse
     {
         $title = $request->get('title');
         $text = $request->get('text');
@@ -32,7 +40,11 @@ class TextController extends Controller
         return redirect()->route('showPosts');
     }
 
-    public function editPost(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function editPost(Request $request): RedirectResponse
     {
         $id = $request->get('id');
         $title = $request->get('title');
@@ -48,7 +60,11 @@ class TextController extends Controller
         return redirect()->route('showPosts');
     }
 
-    public function deletePost(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function deletePost(Request $request): RedirectResponse
     {
         $id = $request->get('id');
         TelegraphText::where('id', '=', $id)->delete();
