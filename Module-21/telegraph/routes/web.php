@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TextController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [TextController::class, 'showPosts'])->name('showPosts');
+Route::post('/', [TextController::class, 'addPost']);
+Route::put('/', [TextController::class, 'editPost']);
+Route::delete('/', [TextController::class, 'deletePost']);
